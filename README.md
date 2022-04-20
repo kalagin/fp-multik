@@ -5,16 +5,14 @@ Functional utility for control flow and conditional operator for functions.
 - [Installation](#installation)
 - [Features](#features)
 - [Usage](#usage)
-  - [Simple predicate as value](#usage-simple-predicate)
-  - [Custom predicate](#usage-custom-predicate)
-  - [OR predicate](#usage-or-predicate)
-  - [Default predicate](#usage-simple-predicate)
+  - Simple predicate as value
+  - Custom predicate
+  - OR predicate
+  - Default predicate
 - [Use-cases](#use-cases)
 - [Typescript](#typescript)
 - [Alternatives](#alternatives)
 - [Contributing](#contributing)
-
----
 
 ## Installation
 
@@ -30,16 +28,12 @@ Yarn
 yarn add multik
 ```
 
----
-
 ## Features
 
 - 🐣 **small** API and size
 - 🌊 **pipable**
 - 🙌🏻 **usefull** access to data/selector in predicates
-- 🔗 better typing
-
----
+- 🔗 **better** typing
 
 ## Usage
 
@@ -57,7 +51,7 @@ multik(
 Matching **Number** values
 
 ```ts
-import multik from './index';
+import multik from 'multik';
 
 const nominalDegreesOfThousand = multik(
   (n: number) => n,
@@ -108,7 +102,7 @@ shot({ coord: [0, 0] }); // undefined
 Matching **Object** values
 
 ```ts
-import multik from './index';
+import multik from 'multik';
 
 interface Response {
   code: number;
@@ -127,7 +121,7 @@ getResult({ code: 500 }); // "error"
 ### Custom predicate
 
 ```ts
-import multik from './index';
+import multik from 'multik';
 
 const fizzBuzz = multik(
   (n: number) => n,
@@ -144,7 +138,7 @@ fizzBuzz(15); // "Buzz"
 ### OR predicate
 
 ```ts
-import multik from './index';
+import multik from 'multik';
 
 enum UserRole {
   Admin = 'admin',
@@ -183,19 +177,13 @@ const greet = multik(
 greet({ id: 1, lang: "germany" }); // "not matched"
 ```
 
----
-
 ## Use-cases
 
 TODO
 
----
-
 ## Typescript
 
 TODO
-
----
 
 ## Alternatives
 
