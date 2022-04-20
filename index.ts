@@ -26,18 +26,14 @@ export function deepEqual(obj1: any, obj2: any) {
 }
 
 export default function multik<T = unknown, S = any, R = unknown>(
-  selectorFn: (data: T) => S,
+  selectorFn: (arg: T) => S,
   ...predicateAsAction: Array<
-    | [predicate: S, action: (data?: T, selector?: S) => R]
-    | [predicate: S[], action: (data?: T, selector?: S) => R]
-    | [predicate: () => Promise<R>, action: (data?: T, selector?: S) => R]
-    | [
-        predicate: (data?: T, selector?: S) => boolean,
-        action: (data?: T, selector?: S) => R,
-      ]
-    | [action: (data?: T, selector?: S) => R]
+    | [predicateValue: S, action: (arg: T, selector: S) => R]
+    | [predicateOr: S[], action: (arg: T, selector: S) => R]
+    | [predicate: (arg: T, selector: S) => boolean, action: (arg: T, selector: S) => R]
+    | [action: (arg: T, selector: S) => R]
   >
-): (data: T) => R {
+): (arg: T) => R {
   const predicates = Object.fromEntries(predicateAsAction);
 
   return (...args) => {
@@ -54,7 +50,7 @@ export default function multik<T = unknown, S = any, R = unknown>(
       const predicate = first(predicateAsAction[i]);
       const action = last(predicateAsAction[i]);
 
-      if (typeof predicate === 'string') {
+      if (typeof predicate === 'string' || typeof predicate === 'number') {
         continue;
       }
 
