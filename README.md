@@ -209,7 +209,7 @@ adultInformation({ name: 'John', age: 27 }); // "hey John, your age (27) is righ
 ### Control flow
 
 ```ts
-import multik from './index';
+import multik from 'fp-multik';
 import process from 'process';
 
 const app = multik(
@@ -234,7 +234,7 @@ Command not found
 ### Handling business scenarios
 
 ```ts
-import multik from './index';
+import multik from 'fp-multik';
 
 const convertFile = multik(
   (filepath: string, format: string) => format,
@@ -281,7 +281,7 @@ try {
 ### Handling state
 
 ```ts
-import multik from './index';
+import multik from 'fp-multik';
 
 type Action = {
   type: string;
