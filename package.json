@@ -1,7 +1,7 @@
 {
   "name": "multik",
   "version": "0.1.0",
-  "description": "JS/TS lightweight multimethod util",
+  "description": "JS/TS lightweight value-multimethod util",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
@@ -10,8 +10,8 @@
   },
   "scripts": {
     "build": "npm run clean && tsc --p tsconfig.build.json",
-    "test": "jest ./test.spec.ts",
-    "test-coverage": "jest ./test.spec.ts --collect-coverage --silent",
+    "test": "jest",
+    "test-coverage": "jest --collect-coverage --silent",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --quiet",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run test && npm run build"

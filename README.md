@@ -1,6 +1,16 @@
 # multik 🤹🏼‍♂️
 
-Functional utility for control flow and conditional operator for functions.
+Small functional utility for control flow and conditional operator for functions.
+**Multik** is value-based multimethod:
+
+It's simple:
+
+1. import multik
+2. create in first argument of multik - selector from initial arguments
+3. write in the rest of the arguments what you want to process in the predicates
+4. enjoi!
+
+---
 
 - [Installation](#installation)
 - [Features](#features)
@@ -9,8 +19,8 @@ Functional utility for control flow and conditional operator for functions.
   - Custom predicate
   - OR predicate
   - Default predicate
+  - Access to initial args and selector
 - [Use-cases](#use-cases)
-- [Typescript](#typescript)
 - [Alternatives](#alternatives)
 - [Contributing](#contributing)
 
@@ -33,7 +43,7 @@ yarn add multik
 - 🐣 **small** API and size
 - 🌊 **pipable**
 - 🙌🏻 **usefull** access to data/selector in predicates
-- 🔗 **better** typing
+- 🔗 **better types** than in analogues
 
 ## Usage
 
@@ -41,9 +51,9 @@ yarn add multik
 
 ```sh
 multik(
-  selectorFunction,
-  ...predicatesAsAction,
-);
+  selectorFunction(...initialArg) => selector,
+  ...predicatesAsAction => result,
+): (initialArg) => result;
 ```
 
 ### Simple predicate as value
@@ -132,7 +142,7 @@ const fizzBuzz = multik(
 
 fizzBuzz(3); // "Fizz"
 fizzBuzz(5); // "Buzz"
-fizzBuzz(15); // "Buzz"
+fizzBuzz(15); // "FizzBuzz"
 ```
 
 ### OR predicate
@@ -177,13 +187,134 @@ const greet = multik(
 greet({ id: 1, lang: "germany" }); // "not matched"
 ```
 
+### Access to initial arg and selector
+
+```ts
+import multik from 'multik';
+
+const adultInformation = multik(
+  (user) => user.age,
+  [(age) => age >= 18, (user, age) => `hey ${user.name}, your age (`${age}`) is right, access success!`),
+  [(user, age) => `your age (${age}) less 18, access denied`]
+);
+
+adultInformation({ name: 'Greg', age: 17 }); // "your age (17) less 18, access denied"
+adultInformation({ name: 'John', age: 27 }); // "hey John, your age (27) is right, access success!"
+```
+
 ## Use-cases
 
-TODO
+### Control flow
 
-## Typescript
+```ts
+import multik from './index';
+import process from 'process';
 
-TODO
+const app = multik(
+  (args: string[]) => args[2],
+  ['--help', () => console.log('Show help information')],
+  ['--run', () => console.log('Run job')],
+  [() => console.log('Command not found')],
+);
+
+app(process.argv);
+```
+
+```sh
+user % ts-node app.ts --help
+Show help information
+user % ts-node app.ts --run
+Run job
+user % ts-node app.ts
+Command not found
+```
+
+### Handling business scenarios
+
+```ts
+import multik from './index';
+
+const convertFile = multik(
+  (filepath: string, format: string) => format,
+  ['json', (format, filepath) => console.log(`Convert ${filepath} as JSON...`)],
+  ['html', (format, filepath) => console.log(`Convert ${filepath} as HTML...`)],
+  ['csv', (format, filepath) => console.log(`Convert ${filepath} as CSV...`)],
+  [(format, filepath) => console.log(`Convert ${filepath} by default as TXT...`)],
+);
+
+convertFile('/Users/file1.data', 'json');
+convertFile('/Users/file1.data', 'html');
+convertFile('/Users/file1.data', 'csv');
+convertFile('/Users/file1.data', 'unknown');
+```
+
+```sh
+user % ts-node app.ts
+Convert /Users/file1.data as JSON...
+Convert /Users/file1.data as HTML...
+Convert /Users/file1.data as CSV...
+Convert /Users/file1.data by default as TXT...
+```
+
+### Handling error
+
+```ts
+const handleFetchError = multik(
+  (clientError: HttpClientError) => clientError.code,
+  [404, () => { /* ... handle 404 code */ },
+  [500, () => { /* ... handle 500 code */ },
+);
+
+try {
+  const response = await fetch('http://mysite.ru', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+} catch (e: HttpClientError) {
+  handleFetchError(e);
+}
+```
+
+### Handling state
+
+```ts
+import multik from './index';
+
+type Action = {
+  type: string;
+  id?: number;
+  text?: string;
+};
+
+type Store = {
+  add: (text: string) => void;
+  remove: (id: number) => void;
+  toggle: (id: number) => void;
+};
+
+const store: Store = {
+  add(text: string) {
+    console.log(`todo with ${text} added`);
+  },
+  remove(id: number) {
+    console.log(`${id} todo removed`);
+  },
+  toggle(id: number) {
+    console.log(`#${id} todo toggled`);
+  },
+};
+
+const handleAction = multik(
+  (action: Action, store: Store) => action.type, // custom dispatch
+  ['ADD_TODO', (selector, action, store) => store.add(action.text!)],
+  ['REMOVE_TODO', (selector, action, store) => store.remove(action.id!)],
+  ['TOGGLE_TODO', (selector, action, store) => store.toggle(action.id!)],
+);
+
+handleAction({ type: 'ADD_TODO', text: 'Eat banana' }, store); // log "todo with Eat banana added"
+handleAction({ type: 'TOGGLE_TODO', id: 1 }, store); // log "#1 todo toggled"
+```
 
 ## Alternatives
 
