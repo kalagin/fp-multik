@@ -263,8 +263,18 @@ Convert /Users/file1.data by default as TXT...
 ```ts
 const handleFetchError = multik(
   (clientError: HttpClientError) => clientError.code,
-  [404, () => { /* ... handle 404 code */ },
-  [500, () => { /* ... handle 500 code */ },
+  [
+    404,
+    () => {
+      /* ... handle 404 code */
+    },
+  ],
+  [
+    500,
+    () => {
+      /* ... handle 500 code */
+    },
+  ],
 );
 
 try {
