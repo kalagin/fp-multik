@@ -1,5 +1,5 @@
 {
-  "name": "multik",
+  "name": "@fp/multik",
   "version": "0.1.0",
   "description": "JS/TS lightweight value-multimethod util",
   "main": "dist/index.js",

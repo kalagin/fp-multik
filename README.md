@@ -1,4 +1,4 @@
-# multik 🤹🏼‍♂️
+# @fp/multik 🤹🏼‍♂️
 
 Small functional utility for control flow and conditional operator for functions.
 **Multik** is value-based multimethod:
@@ -29,13 +29,13 @@ It's simple:
 NPM
 
 ```shell
-npm install multik
+npm install @fp/multik
 ```
 
 Yarn
 
 ```shell
-yarn add multik
+yarn add @fp/multik
 ```
 
 ## Features
