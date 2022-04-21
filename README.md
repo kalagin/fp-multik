@@ -1,11 +1,13 @@
-# @fp/multik 🤹🏼‍♂️
+# fp-multik 🤹🏼‍♂️
+
+[![npm version](https://badge.fury.io/js/fp-multik.svg)](https://badge.fury.io/js/fp-multik)
 
 Small functional utility for control flow and conditional operator for functions.
 **Multik** is value-based multimethod:
 
 It's simple:
 
-1. import multik
+1. import fp-multik
 2. create in first argument of multik - selector from initial arguments
 3. write in the rest of the arguments what you want to process in the predicates
 4. enjoi!
@@ -29,13 +31,13 @@ It's simple:
 NPM
 
 ```shell
-npm install @fp/multik
+npm install fp-multik
 ```
 
 Yarn
 
 ```shell
-yarn add @fp/multik
+yarn add fp-multik
 ```
 
 ## Features
@@ -61,7 +63,7 @@ multik(
 Matching **Number** values
 
 ```ts
-import multik from 'multik';
+import multik from 'fp-multik';
 
 const nominalDegreesOfThousand = multik(
   (n: number) => n,
@@ -82,7 +84,7 @@ nominalDegreesOfThousand(1000000000000000); // 'quadrillion'
 Matching **String** values
 
 ```ts
-import multik from 'multik';
+import multik from 'fp-multik';
 
 const greet = multik(
   (data) => data.lang,
@@ -96,7 +98,7 @@ greet({ id: 1, lang: "french" }); // "Bonjour"
 Matching **Array** values
 
 ```js
-import multik from 'multik';
+import multik from 'fp-multik';
 
 const shot = multik(
   (data) => data.coord,
@@ -112,7 +114,7 @@ shot({ coord: [0, 0] }); // undefined
 Matching **Object** values
 
 ```ts
-import multik from 'multik';
+import multik from 'fp-multik';
 
 interface Response {
   code: number;
@@ -131,7 +133,7 @@ getResult({ code: 500 }); // "error"
 ### Custom predicate
 
 ```ts
-import multik from 'multik';
+import multik from 'fp-multik';
 
 const fizzBuzz = multik(
   (n: number) => n,
@@ -148,7 +150,7 @@ fizzBuzz(15); // "FizzBuzz"
 ### OR predicate
 
 ```ts
-import multik from 'multik';
+import multik from 'fp-multik';
 
 enum UserRole {
   Admin = 'admin',
@@ -175,7 +177,7 @@ getInformation(guestUser); // "no access"
 ### Default predicate
 
 ```ts
-import multik from 'multik';
+import multik from 'fp-multik';
 
 const greet = multik(
   (data) => data.lang,
@@ -190,7 +192,7 @@ greet({ id: 1, lang: "germany" }); // "not matched"
 ### Access to initial arg and selector
 
 ```ts
-import multik from 'multik';
+import multik from 'fp-multik';
 
 const adultInformation = multik(
   (user) => user.age,
