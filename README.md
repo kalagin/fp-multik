@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/fp-multik.svg)](https://badge.fury.io/js/fp-multik)
 
 Small functional utility for control flow and conditional operator for functions.
-**Multik** is value-based multimethod:
+**Multik** is value-based multimethod for Javascript/Typescript programs.
 
 It's simple:
 
