@@ -12,6 +12,7 @@
     "build": "npm run clean && tsc --p tsconfig.build.json",
     "test": "jest",
     "test-coverage": "jest --collect-coverage --silent",
+    "test-watch": "jest --watch",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --quiet",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run test && npm run build"
