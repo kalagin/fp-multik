@@ -1,6 +1,6 @@
 {
   "name": "fp-multik",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "JS/TS lightweight value-multimethod util",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

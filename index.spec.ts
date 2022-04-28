@@ -41,13 +41,13 @@ describe('multik', () => {
 
     it('access to multiple args and selector value', () => {
       const calc = multik(
-        (n1: number, n2: number, op: string) => op,
-        ['+', (op, n1, n2) => n1 + n2],
-        ['-', (op, n1, n2) => n1 - n2],
+        (_n1: number, op: string, _n2: number) => op,
+        ['+', (_selector, n1, _op, n2) => n1 + n2],
+        ['-', (_selector, n1, _op, n2) => n1 - n2],
       );
 
-      expect(calc(1, 2, '+')).toBe(3);
-      expect(calc(4, 2, '-')).toBe(2);
+      expect(calc(1, '+', 2)).toBe(3);
+      expect(calc(4, '-', 2)).toBe(2);
     });
   });
 
@@ -207,8 +207,8 @@ describe('multik', () => {
     it('access to args and selector value', () => {
       const run = multik(
         (o: { id: number; coord: { x: number; y: number } }) => o.coord,
-        [{ x: 0, y: 0 }, (coord, o) => `${o.id}`],
-        [{ x: 1, y: 1 }, (coord, o) => `${o.id}`],
+        [{ x: 0, y: 0 }, (_coord, o) => `${o.id}`],
+        [{ x: 1, y: 1 }, (_coord, o) => `${o.id}`],
         [(coord) => `${coord.x}:${coord.y} not matched`],
       );
 

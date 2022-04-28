@@ -22,6 +22,7 @@ It's simple:
   - OR predicate
   - Default predicate
   - Access to initial args and selector
+  - Placeholder convection for unused params
 - [Use-cases](#use-cases)
 - [Alternatives](#alternatives)
 - [Contributing](#contributing)
@@ -53,10 +54,16 @@ yarn add fp-multik
 
 ```sh
 multik(
-  selectorFunction(...initialArg) => selector,
-  ...predicatesAsAction => result,
-): (initialArg) => result;
+  selectorFunction(...initialArgs) => selector,
+  [pricidateValue, actionFunction(selector, ...initialArgs) => result],
+  [predicateFunction(selector, ...initialArgs), actionFunction(selector, ...initialArg) => result],
+  [defaultFunction?(selector, ...initialArgs) => result]
+): (initialArgs) => result;
 ```
+
+- **pricidateValue** can be primitive value or Array / Object
+- **predicateFunction** is a classic predicate function that return boolean
+- **defaultFunction** is optional function for specify default result
 
 ### Simple predicate as value
 
@@ -197,12 +204,31 @@ import multik from 'fp-multik';
 const adultInformation = multik(
   (user) => user.age,
   [(age) => age >= 18, (user, age) => `hey ${user.name}, your age (`${age}`) is right, access success!`),
-  [(user, age) => `your age (${age}) less 18, access denied`]
+  [(_user, age) => `your age (${age}) less 18, access denied`]
 );
 
 adultInformation({ name: 'Greg', age: 17 }); // "your age (17) less 18, access denied"
 adultInformation({ name: 'John', age: 27 }); // "hey John, your age (27) is right, access success!"
 ```
+
+### Placeholder convection for unused params
+
+If you want use only concrete arguments in predicate or action and ignore other you can name param start underscore:
+
+```ts
+import multik from 'fp-multik';
+
+const calc = multik(
+  (_n1: number, op: string, _n2: number) => op,
+  ['+', (_selector, n1, _op, n2) => n1 + n2],
+  ['-', (_selector, n1, _op, n2) => n1 - n2],
+);
+
+calc(1, '+', 2); // 3
+calc(4, '-', 2); // 2
+```
+
+that changes show unused params in callback and exclude some conflicts with names
 
 ## Use-cases
 
@@ -261,6 +287,8 @@ Convert /Users/file1.data by default as TXT...
 ### Handling error
 
 ```ts
+import multik from 'fp-multik';
+
 const handleFetchError = multik(
   (clientError: HttpClientError) => clientError.code,
   [
@@ -319,9 +347,9 @@ const store: Store = {
 
 const handleAction = multik(
   (action: Action, store: Store) => action.type, // custom dispatch
-  ['ADD_TODO', (selector, action, store) => store.add(action.text!)],
-  ['REMOVE_TODO', (selector, action, store) => store.remove(action.id!)],
-  ['TOGGLE_TODO', (selector, action, store) => store.toggle(action.id!)],
+  ['ADD_TODO', (_type_, action, store) => store.add(action.text!)],
+  ['REMOVE_TODO', (_type, action, store) => store.remove(action.id!)],
+  ['TOGGLE_TODO', (_type, action, store) => store.toggle(action.id!)],
 );
 
 handleAction({ type: 'ADD_TODO', text: 'Eat banana' }, store); // log "todo with Eat banana added"
@@ -333,7 +361,7 @@ handleAction({ type: 'TOGGLE_TODO', id: 1 }, store); // log "#1 todo toggled"
 Let's overview simple code with **multik**:
 
 ```ts
-import multik from "multik";
+import multik from "fp-multik";
 
 const greet = multik(
   (data) => data.lang,
